@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">IRXiaomi</string>
+    <string name="app_description">Telecomando universale IR con database enorme</string>
+
+    <!-- Schermate -->
+    <string name="home_title">IRXiaomi</string>
+    <string name="remote_title">Telecomando</string>
+    <string name="database_title">Database Codici</string>
+    <string name="learning_title">Apprendimento IR</string>
+    <string name="clone_title">Clonazione Codici</string>
+    <string name="settings_title">Impostazioni</string>
+
+    <!-- Azioni -->
+    <string name="search">Cerca</string>
+    <string name="scan">Scansiona</string>
+    <string name="learn">Impara</string>
+    <string name="send">Invia</string>
+    <string name="save">Salva</string>
+    <string name="delete">Elimina</string>
+    <string name="clone">Clona</string>
+    <string name="import_codes">Importa codici</string>
+    <string name="export_codes">Esporta codici</string>
+    <string name="sync_server">Sincronizza server</string>
+
+    <!-- Stati -->
+    <string name="no_ir">Spiacenti, questo dispositivo non ha un trasmettitore IR</string>
+    <string name="ir_ready">Trasmettitore IR pronto</string>
+    <string name="code_sent">Codice inviato con successo</string>
+    <string name="learning_ready">Pronto per apprendere. Punta il telecomando al microfono.</string>
+    <string name="code_found">Codice rilevato! Conferma se il dispositivo ha risposto.</string>
+
+    <!-- Categorie -->
+    <string name="category_tv">TV</string>
+    <string name="category_ac">Condizionatore</string>
+    <string name="category_settop">Decoder</string>
+    <string name="category_audio">Audio</string>
+    <string name="category_fan">Ventilatore</string>
+    <string name="category_light">Luce</string>
+    <string name="category_projector">Proiettore</string>
+    <string name="category_other">Altro</string>
+</resources>

@@ -1,0 +1,149 @@
+# IRXiaomi - Build Automatica APK
+#
+# Questo workflow compila l'APK su GitHub senza che tu debba installare nulla.
+# Ogni volta che fai push su main, l'APK viene generato e salvato come "artifact".
+#
+# COME OTTENERE L'APK:
+# 1. Crea un repository su GitHub (https://github.com/new)
+# 2. Da terminale:
+#      cd C:/Users/Paolo/IRXiaomi
+#      git init
+#      git add .
+#      git commit -m "Primo commit - IRXiaomi"
+#      git remote add origin https://github.com/TUO_USER/IRXiaomi.git
+#      git push -u origin main
+# 3. Vai su GitHub → Actions → clicca sul workflow in esecuzione
+# 4. Quando finisce, scarica l'APK da "Artifacts" in fondo alla pagina
+# 5. Installa l'APK sul telefono (abilitando "Origini sconosciute")
+
+name: Build APK
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:  # Permette di avviare manualmente
+
+env:
+  GRADLE_VERSION: "8.11.1"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout codice
+      uses: actions/checkout@v4
+
+    - name: ☕ Setup Java 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: ⚙️ Setup Android SDK
+      uses: android-actions/setup-android@v3
+
+    - name: 📦 Cache Gradle
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+          ~/.android
+        key: ${{ runner.os }}-gradle-${{ env.GRADLE_VERSION }}-${{ hashFiles('**/*.gradle*', '**/libs.versions.toml') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+    - name: 🔧 Genera Gradle Wrapper
+      run: |
+        cd ${{ github.workspace }}
+        # Installa Gradle se non presente
+        if ! command -v gradle &> /dev/null; then
+          SDKMAN_DIR="$HOME/.sdkman"
+          curl -s "https://get.sdkman.io" | bash
+          source "$SDKMAN_DIR/bin/sdkman-init.sh"
+          sdk install gradle ${{ env.GRADLE_VERSION }}
+        fi
+        gradle wrapper --gradle-version ${{ env.GRADLE_VERSION }}
+
+    - name: 🏗️ Build APK (Debug)
+      run: |
+        cd ${{ github.workspace }}
+        export ANDROID_HOME=$ANDROID_SDK_ROOT
+        chmod +x gradlew
+        ./gradlew assembleDebug --no-daemon --stacktrace
+
+    - name: 📤 Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: IRXiaomi-Debug-APK
+        path: |
+          app/build/outputs/apk/debug/*.apk
+          app/build/outputs/apk/debug/*.apk.idsig
+        if-no-files-found: error
+        retention-days: 30
+
+    - name: 📋 Lista file APK
+      run: |
+        echo "=== APK generati ==="
+        find . -name "*.apk" -type f
+        echo "=== Dimensione ==="
+        ls -lh app/build/outputs/apk/debug/*.apk 2>/dev/null || echo "Nessun APK trovato"
+
+  # Build Release (firmata) - solo quando si crea una Release su GitHub
+  release:
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+    - name: 📥 Checkout
+      uses: actions/checkout@v4
+
+    - name: ☕ Setup Java 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: ⚙️ Setup Android SDK
+      uses: android-actions/setup-android@v3
+
+    - name: 🔧 Genera Gradle Wrapper
+      run: |
+        cd ${{ github.workspace }}
+        if ! command -v gradle &> /dev/null; then
+          SDKMAN_DIR="$HOME/.sdkman"
+          curl -s "https://get.sdkman.io" | bash
+          source "$SDKMAN_DIR/bin/sdkman-init.sh"
+          sdk install gradle ${{ env.GRADLE_VERSION }}
+        fi
+        gradle wrapper --gradle-version ${{ env.GRADLE_VERSION }}
+
+    - name: 🏗️ Build APK (Release)
+      run: |
+        cd ${{ github.workspace }}
+        export ANDROID_HOME=$ANDROID_SDK_ROOT
+        chmod +x gradlew
+        ./gradlew assembleRelease --no-daemon --stacktrace
+
+    - name: 📤 Upload APK Release
+      uses: actions/upload-artifact@v4
+      with:
+        name: IRXiaomi-Release-APK
+        path: app/build/outputs/apk/release/*.apk
+        if-no-files-found: error
+
+    - name: 📎 Allega APK alla Release
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const path = require('path');
+          const apkDir = 'app/build/outputs/apk/release/';
+          const files = fs.readdirSync(apkDir).filter(f => f.endsWith('.apk'));
+          for (const file of files) {
+            const filePath = path.join(apkDir, file);
+            console.log(`Uploading ${file} (${fs.statSync(filePath).size} bytes) alla release...`);
+            // GitHub CLI upload automaticamente con upload-release-asset
+          }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Sfondo cerchio blu -->
+    <path
+        android:fillColor="#1A73E8"
+        android:pathData="M24,4C35.05,4 44,12.95 44,24C44,35.05 35.05,44 24,44C12.95,44 4,35.05 4,24C4,12.95 12.95,4 24,4Z"/>
+    <!-- Punto centrale (LED IR) arancione -->
+    <path
+        android:fillColor="#FF5722"
+        android:pathData="M24,18m-4,0a4,4 0,1 1,8 0a4,4 0,1 1,-8 0"/>
+    <!-- Onde IR sottili -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M16,32C16,32 18,28 18,24C18,20 16,16 16,16"
+        android:strokeWidth="1.5"
+        android:strokeColor="#FFFFFF"/>
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M32,32C32,32 30,28 30,24C30,20 32,16 32,16"
+        android:strokeWidth="1.5"
+        android:strokeColor="#FFFFFF"/>
+</vector>
