@@ -339,7 +339,7 @@ class LircImporter(private val context: Context) {
         // Pre-data
         if (preDataBits > 0) {
             for (i in preDataBits - 1 downTo 0) {
-                val bit = ((preData shr i.toLong()) and 1).toInt()
+                val bit = ((preData shr i) and 1L).toInt()
                 pattern.add(one.first)
                 pattern.add(if (bit == 1) one.second else zero.second)
             }
@@ -347,7 +347,7 @@ class LircImporter(private val context: Context) {
 
         // Data
         for (i in bits - 1 downTo 0) {
-            val bit = ((value shr i.toLong()) and 1).toInt()
+            val bit = ((value shr i) and 1L).toInt()
             pattern.add(one.first)
             pattern.add(if (bit == 1) one.second else zero.second)
         }
@@ -355,7 +355,7 @@ class LircImporter(private val context: Context) {
         // Post-data
         if (postDataBits > 0) {
             for (i in postDataBits - 1 downTo 0) {
-                val bit = ((postData shr i.toLong()) and 1).toInt()
+                val bit = ((postData shr i) and 1L).toInt()
                 pattern.add(one.first)
                 pattern.add(if (bit == 1) one.second else zero.second)
             }
@@ -413,7 +413,7 @@ class LircImporter(private val context: Context) {
                 deviceType = "TV",
                 protocol = "NEC",
                 frequency = 38000,
-                pattern = IrCodeEntity.patternToString(pattern.pattern),
+                pattern = pattern.pattern,
                 address = address.toLong(),
                 command = cmd.toLong(),
                 category = "$brand-TV",

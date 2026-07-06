@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.irxiaomi.db.IrCodeEntity
+import com.irxiaomi.learning.AudioIrLearner
 import com.irxiaomi.ui.screen.*
 import com.irxiaomi.ui.theme.IRXiaomiTheme
 import kotlinx.coroutines.launch
@@ -49,7 +50,7 @@ fun AppNavigation(viewModel: MainViewModel) {
     val databaseSize by viewModel.databaseSize.collectAsState()
     val irManagerInfo by viewModel.irManagerInfo.collectAsState()
     val searchResults by viewModel.searchResults.collectAsState()
-    val learnerState by viewModel.learner.state.collectAsState()
+    val learnerState by viewModel.learner.state.collectAsState(initial = AudioIrLearner.LearningState())
 
     NavHost(navController = navController, startDestination = "home") {
 

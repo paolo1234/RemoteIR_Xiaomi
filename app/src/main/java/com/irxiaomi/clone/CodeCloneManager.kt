@@ -153,6 +153,24 @@ class CodeCloneManager(private val context: Context) {
     }
 
     /**
+     * Clona un codice cambiandone il brand.
+     * Utile per copiare comandi che funzionano su una marca verso un'altra.
+     */
+    fun cloneCodeToBrand(code: IrCodeEntity, targetBrand: String, targetDeviceType: String? = null): IrCodeEntity {
+        return code.copy(
+            id = 0,
+            brand = targetBrand,
+            displayName = "${code.name} ($targetBrand)",
+            deviceType = targetDeviceType ?: code.deviceType,
+            category = "$targetBrand-${targetDeviceType ?: code.deviceType}",
+            tags = "$targetBrand,${targetDeviceType ?: code.deviceType},${code.protocol},cloned",
+            source = "cloned_from_${code.brand}",
+            isVerified = false,
+            notes = "Clonato da ${code.brand} via app"
+        )
+    }
+
+    /**
      * Crea un file di export e ne restituisce l'URI.
      */
     fun createExportFile(codes: List<IrCodeEntity>, filename: String = "ir_codes_export"): Uri? {

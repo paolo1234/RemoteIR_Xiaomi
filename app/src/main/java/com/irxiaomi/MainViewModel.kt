@@ -13,6 +13,7 @@ import com.irxiaomi.sync.LircImporter
 import com.irxiaomi.sync.RemoteSync
 import com.irxiaomi.clone.VariantGenerator
 import com.irxiaomi.clone.CodeCloneManager
+import com.irxiaomi.db.DatabaseSeed
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -114,7 +115,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun cloneCodes(sourceBrand: String, targetBrand: String, deviceType: String) {
         viewModelScope.launch(Dispatchers.Default) {
             val sourceCodes = codeDao.getByBrandAndDevice(sourceBrand, deviceType)
-            val cloned = sourceCodes.map { codeCloneManager.cloneCode(it, targetBrand, deviceType) }
+            val cloned = sourceCodes.map { codeCloneManager.cloneCodeToBrand(it, targetBrand, deviceType) }
             if (cloned.isNotEmpty()) {
                 codeDao.insertAll(cloned)
                 _databaseSize.value = codeDao.count()

@@ -103,7 +103,7 @@ class ConsumerIrManagerImpl(context: Context) : IrManager {
         return mapOf(
             "name" to name,
             "supported" to isSupported(),
-            "carrier_frequencies" to (consumerIrManager?.carrierFrequencyRange?.joinToString(", ") ?: "unknown")
+            "carrier_frequencies" to (consumerIrManager?.carrierFrequencies?.joinToString { "${it.minFrequency}-${it.maxFrequency}Hz" } ?: "unknown")
         )
     }
 }
@@ -225,14 +225,14 @@ object PatternGenerator {
 
         // Command (7 bit, LSB first)
         for (i in 0 until cmdBits) {
-            val bit = ((command shr i.toLong()) and 1).toInt()
+            val bit = ((command shr i) and 1L).toInt()
             pattern.add(600)
             pattern.add(if (bit == 1) 1200 else 600)
         }
 
         // Device address (5 bit, LSB first)
         for (i in 0 until addrBits) {
-            val bit = ((deviceAddress shr i.toLong()) and 1).toInt()
+            val bit = ((deviceAddress shr i) and 1L).toInt()
             pattern.add(600)
             pattern.add(if (bit == 1) 1200 else 600)
         }

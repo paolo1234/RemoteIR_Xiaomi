@@ -196,9 +196,9 @@ private fun AcRemoteContent(onSendCode: (IrCodeEntity) -> Unit) {
         }
         HorizontalDivider()
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-            AssistChip(onClick = { }) { Icon(Icons.Default.Bedtime, null, modifier = Modifier.size(18.dp)); Spacer(Modifier.width(4.dp)); Text("Sleep") }
-            AssistChip(onClick = { }) { Icon(Icons.Default.Bolt, null, modifier = Modifier.size(18.dp)); Spacer(Modifier.width(4.dp)); Text("Turbo") }
-            AssistChip(onClick = { }) { Icon(Icons.Default.Timer, null, modifier = Modifier.size(18.dp)); Spacer(Modifier.width(4.dp)); Text("Timer") }
+            AssistChip(onClick = { }, label = { Text("Sleep") }, leadingIcon = { Icon(Icons.Default.Bedtime, "Icona", modifier = Modifier.size(18.dp)) })
+            AssistChip(onClick = { }, label = { Text("Turbo") }, leadingIcon = { Icon(Icons.Default.Bolt, "Icona", modifier = Modifier.size(18.dp)) })
+            AssistChip(onClick = { }, label = { Text("Timer") }, leadingIcon = { Icon(Icons.Default.Timer, "Icona", modifier = Modifier.size(18.dp)) })
         }
     }
 }
