@@ -73,7 +73,26 @@ fun AppNavigation(viewModel: MainViewModel) {
         }
 
         composable("remote") {
+            val scope = rememberCoroutineScope()
+            var brands by remember { mutableStateOf<List<String>>(emptyList()) }
+            var selectedBrand by remember { mutableStateOf("Samsung") }
+
+            // Carica marche dal database al primo avvio
+            LaunchedEffect(Unit) {
+                val allBrands = viewModel.codeDao.getAllBrands()
+                brands = allBrands.ifEmpty {
+                    listOf("Samsung", "LG", "Sony", "Panasonic", "Philips", "Toshiba",
+                        "Hisense", "TCL", "Sharp", "Hitachi", "Daikin", "Mitsubishi",
+                        "Haier", "Gree", "Midea", "Xiaomi", "Huawei", "Bose",
+                        "Yamaha", "Denon", "Onkyo", "Roku")
+                }
+                if (selectedBrand !in brands) selectedBrand = brands.first()
+            }
+
             RemoteScreen(
+                currentBrand = selectedBrand,
+                availableBrands = brands,
+                onBrandChange = { selectedBrand = it },
                 onBack = { navController.popBackStack() },
                 onSendCode = { code -> viewModel.sendCode(code) }
             )

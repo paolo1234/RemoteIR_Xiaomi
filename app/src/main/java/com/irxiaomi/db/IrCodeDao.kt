@@ -62,6 +62,9 @@ interface IrCodeDao {
     @Query("SELECT DISTINCT brand FROM ir_codes WHERE device_type = :deviceType ORDER BY brand")
     fun getBrandsByDeviceType(deviceType: String): Flow<List<String>>
 
+    @Query("SELECT DISTINCT brand FROM ir_codes ORDER BY brand")
+    suspend fun getAllBrands(): List<String>
+
     @Query("SELECT DISTINCT model FROM ir_codes WHERE brand = :brand AND device_type = :deviceType ORDER BY model")
     suspend fun getModelsByBrandAndDevice(brand: String, deviceType: String): List<String>
 
