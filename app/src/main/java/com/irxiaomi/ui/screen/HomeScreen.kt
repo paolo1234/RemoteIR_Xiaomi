@@ -17,6 +17,10 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    databaseSize: Int = 0,
+    isSeeding: Boolean = false,
+    seedCount: Int = 0,
+    irReady: Boolean = true,
     onNavigateToRemote: () -> Unit,
     onNavigateToDatabase: () -> Unit,
     onNavigateToLearning: () -> Unit,
@@ -103,14 +107,22 @@ fun HomeScreen(
                     Column {
                         Text("Status IR", style = MaterialTheme.typography.labelLarge)
                         Text(
-                            "Pronto",
+                            if (irReady) "Pronto" else "Non disponibile",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.primary
+                            color = if (irReady) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
                         )
                     }
                     Column(horizontalAlignment = Alignment.End) {
                         Text("DB Codici", style = MaterialTheme.typography.labelLarge)
-                        Text("0 comandi", style = MaterialTheme.typography.bodyMedium)
+                        if (isSeeding) {
+                            Text("Generazione... $seedCount",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.tertiary)
+                        } else {
+                            Text("$databaseSize comandi",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.primary)
+                        }
                     }
                 }
             }

@@ -54,11 +54,16 @@ fun AppNavigation(viewModel: MainViewModel) {
 
     val isSeeding by viewModel.isSeeding.collectAsState()
     val seedCount by viewModel.seedProgress.collectAsState()
+    val irReady by viewModel.irReady.collectAsState()
 
     NavHost(navController = navController, startDestination = "home") {
 
         composable("home") {
             HomeScreen(
+                databaseSize = databaseSize,
+                isSeeding = isSeeding,
+                seedCount = seedCount,
+                irReady = irReady,
                 onNavigateToRemote = { navController.navigate("remote") },
                 onNavigateToDatabase = { navController.navigate("database") },
                 onNavigateToLearning = { navController.navigate("learning") },

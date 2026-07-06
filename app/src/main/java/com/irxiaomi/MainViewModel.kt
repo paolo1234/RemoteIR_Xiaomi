@@ -62,10 +62,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val searchResults = MutableStateFlow<List<IrCodeEntity>>(emptyList())
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             _irReady.value = irManager.isSupported()
             _irManagerInfo.value = irManager.getDeviceInfo()
-            _databaseSize.value = codeDao.count()
+            val size = codeDao.count()
+            _databaseSize.value = size
+
+            // Auto-seed se il database è vuoto (primo avvio)
+            if (size == 0) {
+                seedDatabase()
+            }
         }
     }
 
