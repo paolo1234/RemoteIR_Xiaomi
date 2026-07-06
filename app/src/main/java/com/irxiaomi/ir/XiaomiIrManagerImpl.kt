@@ -12,7 +12,7 @@ import android.util.Log
  * - com.xiaomi.ir.IrService
  * - android.hardware.ir.IrService (alcune versioni)
  */
-class XiaomiIrManagerImpl(context: Context) : IrManager {
+class XiaomiIrManagerImpl(private val context: Context) : IrManager {
 
     companion object {
         private const val TAG = "XiaomiIrManager"

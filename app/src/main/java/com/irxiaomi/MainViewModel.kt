@@ -126,11 +126,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     /** Importa database LIRC */
     fun importLirc() {
         viewModelScope.launch {
-            lircImporter.importFromAssets(codeDao) { progress ->
-                if (progress.isComplete) {
-                    _databaseSize.value = codeDao.count()
-                }
-            }
+            lircImporter.importFromAssets(codeDao) { /* progress callback senza suspend */ }
+            refreshDatabaseSize()
         }
     }
 
@@ -139,7 +136,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             val localCodes = codeDao.getAll()
             remoteSync.sync(localCodes, codeDao)
-            _databaseSize.value = codeDao.count()
+            refreshDatabaseSize()
         }
     }
 

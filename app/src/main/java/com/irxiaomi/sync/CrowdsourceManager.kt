@@ -70,18 +70,21 @@ class CrowdsourceManager(private val context: Context) {
     suspend fun syncPending(dao: IrCodeDao): Int = withContext(Dispatchers.IO) {
         var uploaded = 0
 
+        val batch: List<IrCodeEntity>
         synchronized(pendingUploads) {
-            val batch = pendingUploads.toList()
+            batch = pendingUploads.toList()
             pendingUploads.clear()
+        }
 
-            for (code in batch) {
-                try {
-                    // In produzione: chiamata API al server community
-                    dao.insert(code)
-                    uploaded++
-                    Log.i(TAG, "Uploaded: ${code.brand} ${code.name}")
-                } catch (e: Exception) {
-                    Log.e(TAG, "Upload error", e)
+        for (code in batch) {
+            try {
+                // In produzione: chiamata API al server community
+                dao.insert(code)
+                uploaded++
+                Log.i(TAG, "Uploaded: ${code.brand} ${code.name}")
+            } catch (e: Exception) {
+                Log.e(TAG, "Upload error", e)
+                synchronized(pendingUploads) {
                     pendingUploads.add(code)  // Riaccoda
                 }
             }

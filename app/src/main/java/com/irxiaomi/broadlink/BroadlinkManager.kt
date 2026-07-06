@@ -49,12 +49,16 @@ class BroadlinkManager {
 
         /** Magic bytes per crittografia Broadlink */
         private val BROADLINK_KEY = byteArrayOf(
-            0x09, 0x76, 0x28, 0x34, 0x3F, 0xE9, 0x9E, 0x23,
-            0x76, 0x5C, 0x15, 0x13, 0xAC, 0xCF, 0x8B, 0x02
+            0x09.toByte(), 0x76.toByte(), 0x28.toByte(), 0x34.toByte(),
+            0x3F.toByte(), 0xE9.toByte(), 0x9E.toByte(), 0x23.toByte(),
+            0x76.toByte(), 0x5C.toByte(), 0x15.toByte(), 0x13.toByte(),
+            0xAC.toByte(), 0xCF.toByte(), 0x8B.toByte(), 0x02.toByte()
         )
         private val BROADLINK_IV = byteArrayOf(
-            0x56, 0x2E, 0x17, 0x99, 0x6D, 0x09, 0x3D, 0x28,
-            0xDD, 0xB3, 0xBA, 0x69, 0x5A, 0x2E, 0x6F, 0x58
+            0x56.toByte(), 0x2E.toByte(), 0x17.toByte(), 0x99.toByte(),
+            0x6D.toByte(), 0x09.toByte(), 0x3D.toByte(), 0x28.toByte(),
+            0xDD.toByte(), 0xB3.toByte(), 0xBA.toByte(), 0x69.toByte(),
+            0x5A.toByte(), 0x2E.toByte(), 0x6F.toByte(), 0x58.toByte()
         )
     }
 
@@ -433,30 +437,30 @@ class BroadlinkManager {
         val packet = ByteArray(packetSize)
 
         // Header
-        packet[0] = 0x00
-        packet[1] = 0x00
+        packet[0] = 0x00.toByte()
+        packet[1] = 0x00.toByte()
         packet[2] = 0xBC.toByte()
-        packet[3] = 0x00
-        packet[4] = 0x00
-        packet[5] = 0x00
-        packet[6] = command and 0xFF
-        packet[7] = (command shr 8) and 0xFF
+        packet[3] = 0x00.toByte()
+        packet[4] = 0x00.toByte()
+        packet[5] = 0x00.toByte()
+        packet[6] = (command and 0xFF).toByte()
+        packet[7] = ((command shr 8) and 0xFF).toByte()
 
         // MAC address
         val mac = device.macAddress
         System.arraycopy(mac, 0, packet, 16, mac.size.coerceAtMost(6))
 
         // Device type
-        packet[22] = device.deviceType and 0xFF
-        packet[23] = (device.deviceType shr 8) and 0xFF
+        packet[22] = (device.deviceType and 0xFF).toByte()
+        packet[23] = ((device.deviceType shr 8) and 0xFF).toByte()
 
         // Checksum del payload prima della cifratura
         val checksum = payload.fold(0) { acc, b -> acc + (b.toInt() and 0xFF) } and 0xFFFF
-        packet[24] = checksum and 0xFF
-        packet[25] = (checksum shr 8) and 0xFF
+        packet[24] = (checksum and 0xFF).toByte()
+        packet[25] = ((checksum shr 8) and 0xFF).toByte()
 
         // Padding
-        packet[40] = 0x01  // CRC del payload cifrato (da calcolare)
+        packet[40] = 0x01.toByte()  // CRC del payload cifrato (da calcolare)
 
         // Payload cifrato
         System.arraycopy(encrypted, 0, packet, 56, encrypted.size)

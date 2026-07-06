@@ -52,6 +52,9 @@ fun AppNavigation(viewModel: MainViewModel) {
     val searchResults by viewModel.searchResults.collectAsState()
     val learnerState by viewModel.learner.state.collectAsState(initial = AudioIrLearner.LearningState())
 
+    val isSeeding by viewModel.isSeeding.collectAsState()
+    val seedCount by viewModel.seedProgress.collectAsState()
+
     NavHost(navController = navController, startDestination = "home") {
 
         composable("home") {
@@ -146,8 +149,6 @@ fun AppNavigation(viewModel: MainViewModel) {
             )
         }
 
-        val isSeeding by viewModel.isSeeding.collectAsState()
-        val seedCount by viewModel.seedProgress.collectAsState()
         composable("settings") {
             SettingsScreen(
                 onBack = { navController.popBackStack() },

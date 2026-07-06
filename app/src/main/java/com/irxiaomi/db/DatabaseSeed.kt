@@ -363,11 +363,11 @@ object DatabaseSeed {
 
         // Filtra duplicati comandi all'interno della lista
         val seen = mutableSetOf<Long>()
-        val uniqueCommands = commands.filter { (cmd, _) -> seen.add(cmd) }
+        val uniqueCommands = commands.filter { (cmd, _) -> seen.add(cmd.toLong()) }
 
         for ((cmd, name) in uniqueCommands) {
             try {
-                val pattern = PatternGenerator.generateNec(address, cmd)
+                val pattern = PatternGenerator.generateNec(address, cmd.toLong())
                 val entity = IrCodeEntity(
                     name = name,
                     displayName = name,
@@ -443,9 +443,9 @@ object DatabaseSeed {
         val seen = mutableSetOf<Long>()
 
         for ((cmd, name) in AUDIO_COMMANDS) {
-            if (!seen.add(cmd)) continue
+            if (!seen.add(cmd.toLong())) continue
             try {
-                val pattern = PatternGenerator.generateNec(address, cmd)
+                val pattern = PatternGenerator.generateNec(address, cmd.toLong())
                 val entity = IrCodeEntity(
                     name = name,
                     displayName = name,
@@ -482,9 +482,9 @@ object DatabaseSeed {
         val seen = mutableSetOf<Long>()
 
         for ((cmd, name) in STB_COMMANDS) {
-            if (!seen.add(cmd)) continue
+            if (!seen.add(cmd.toLong())) continue
             try {
-                val pattern = PatternGenerator.generateNec(address, cmd)
+                val pattern = PatternGenerator.generateNec(address, cmd.toLong())
                 val entity = IrCodeEntity(
                     name = name,
                     displayName = name,
@@ -639,7 +639,7 @@ object DatabaseSeed {
                     // Genera comandi standard TV per il nuovo address
                     for ((cmd, name) in TV_COMMANDS.take(10)) {  // Solo i primi 10 per non esagerare
                         try {
-                            val pattern = PatternGenerator.generateNec(newAddr, cmd)
+                            val pattern = PatternGenerator.generateNec(newAddr, cmd.toLong())
                             val entity = IrCodeEntity(
                                 name = "$name (A${delta})",
                                 displayName = "$name (A${delta})",
