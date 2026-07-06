@@ -402,7 +402,7 @@ private fun AcRemoteContent(brand: String, onSendCode: (IrCodeEntity) -> Unit) {
             modes.forEach { m ->
                 FilterChip(selected = mode == m, onClick = {
                     mode = m
-                    onSendCode(generateRemoteCode(brand, "AC", RemoteButton("Mode $m", null, 0x02 + modes.indexOf(m))))
+                    onSendCode(generateRemoteCode(brand, "AC", RemoteButton("Mode $m", null, (0x02L + modes.indexOf(m)).toLong())))
                 }, label = { Text(m) })
             }
         }
@@ -411,7 +411,7 @@ private fun AcRemoteContent(brand: String, onSendCode: (IrCodeEntity) -> Unit) {
             fanSpeeds.forEach { f ->
                 FilterChip(selected = fanSpeed == f, onClick = {
                     fanSpeed = f
-                    onSendCode(generateRemoteCode(brand, "AC", RemoteButton("Fan $f", null, 0x07 + fanSpeeds.indexOf(f))))
+                    onSendCode(generateRemoteCode(brand, "AC", RemoteButton("Fan $f", null, (0x07L + fanSpeeds.indexOf(f)).toLong())))
                 }, label = { Text(f) })
             }
         }
